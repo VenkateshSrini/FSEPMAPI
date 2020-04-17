@@ -14,5 +14,6 @@ namespace PMO.API.Repository
         public Task<List<PMOUser>> GetAllUser();
         public Task<List<PMOUser>> GetAllUserMatchAnyCriteria(UserSearchCriteria userSearchCriteria);
         public Task<PMOUser> GetUserByEmployeeId(string employeeId);
+        public Task<bool> DeleteUser(PMOUser pmoUser);
     }
 }
