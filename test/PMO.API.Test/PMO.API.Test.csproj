@@ -14,7 +14,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\PMO.API\PMO.API.csproj" />
+    <ProjectReference Include="..\..\src\PMO.API\PMO.API.csproj" />
   </ItemGroup>
+
+  
 
 </Project>
