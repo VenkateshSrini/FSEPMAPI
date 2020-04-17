@@ -1,0 +1,11 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/PMO.API/.vs/PMO.API
+/PMO.API/PMO.API/bin/Debug/netcoreapp3.1
+/PMO.API/PMO.API/obj
+/PMO.API/PMO.API/PMO.API.csproj.user
+/PMO.API/test/PMO.API.Test/bin/Debug/netcoreapp3.1
+/PMO.API/test/PMO.API.Test/obj
