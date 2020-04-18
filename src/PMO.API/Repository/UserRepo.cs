@@ -39,7 +39,7 @@ namespace PMO.API.Repository
         public async Task<bool> DeleteUser(PMOUser pmoUser)
         {
             var dbPmoUser = await asyncDocumentSession.Query<PMOUser>()
-                                                      .Where(user => user.EmployeeId.CompareTo(pmoUser) == 0)
+                                                      .Where(user => user.EmployeeId == pmoUser.EmployeeId)
                                                       .FirstOrDefaultAsync();
             try
             {
@@ -57,7 +57,7 @@ namespace PMO.API.Repository
         public async Task<Tuple<bool, string>> EditUser(PMOUser pmoUser)
         {
             var dbPmoUser = await asyncDocumentSession.Query<PMOUser>()
-                                                      .Where(user => user.EmployeeId.CompareTo(pmoUser) == 0)
+                                                      .Where(user => user.EmployeeId==pmoUser.EmployeeId)
                                                       .FirstOrDefaultAsync();
             if (dbPmoUser == default)
                 throw new ApplicationException("Provided user is not yet added in DB");
@@ -85,11 +85,11 @@ namespace PMO.API.Repository
         {
             var predicate = PredicateBuilder.New<PMOUser>(false);
             if (!string.IsNullOrWhiteSpace(userSearchCriteria.EmployeeID))
-                predicate = predicate.Or(user => user.EmployeeId.CompareTo(userSearchCriteria.EmployeeID) == 0);
+                predicate = predicate.Or(user => user.EmployeeId==userSearchCriteria.EmployeeID);
             if (!string.IsNullOrWhiteSpace(userSearchCriteria.FirstName))
-                predicate = predicate.Or(user => user.FirstName.CompareTo(userSearchCriteria.FirstName) == 0);
+                predicate = predicate.Or(user => user.FirstName==userSearchCriteria.FirstName);
             if(!string.IsNullOrWhiteSpace(userSearchCriteria.LastName))
-                predicate = predicate.Or(user => user.LastName.CompareTo(userSearchCriteria.LastName) == 0);
+                predicate = predicate.Or(user => user.LastName==userSearchCriteria.LastName);
             return await asyncDocumentSession.Query<PMOUser>()
                                              .Where(predicate)
                                              .ToListAsync();
@@ -99,7 +99,7 @@ namespace PMO.API.Repository
         public async Task<PMOUser> GetUserByEmployeeId(string employeeId)
         {
             return await asyncDocumentSession.Query<PMOUser>()
-                                             .Where(user => user.EmployeeId.CompareTo(employeeId) == 0)
+                                             .Where(user => user.EmployeeId==employeeId)
                                              .FirstOrDefaultAsync();
         }
     }
