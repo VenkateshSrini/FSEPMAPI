@@ -10,9 +10,9 @@ namespace PMO.API.Repository
     {
         Task<int> GetProjectCountByPM(string pmId);
         Task<int> GetTaskCountByUser(string userId);
-        Task<ProjectUserVO> GetAllActiveProject();
-        Task<TaskUserVO> GetAllActiveTask(string projectId);
-        Task<ProjectUserVO> GetProjectByName(string projectName);
+        Task<List<ProjectUserVO>> GetAllActiveProject();
+        Task<List<TaskUserVO>> GetAllActiveTask(string projectId);
+        Task<List<ProjectUserVO>> GetProjectByName(string projectName);
         Task<Tuple<bool, string>> AddProject(Project project);
         Task<Tuple<bool, string>> EditProject(Project project);
         Task<bool> SuspendProject(string ProjectId);
