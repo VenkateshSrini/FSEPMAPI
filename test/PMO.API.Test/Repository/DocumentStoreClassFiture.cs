@@ -2,30 +2,41 @@
 using Raven.TestDriver;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
-namespace PMO.API.Test
+namespace PMO.API.Test.Repository
 {
+    [ExcludeFromCodeCoverage]
     public class DocumentStoreClassFixture : RavenTestDriver
     {
         public DocumentStoreClassFixture()
         {
-            prepareDocumentStore();
+            prepareDocumentStore(@".\RavenDBTestDir");
+        }
+        protected  DocumentStoreClassFixture(string path)
+        {
+            prepareDocumentStore(path);
         }
         public IDocumentStore Store { get; private set; }
         protected override void PreInitialize(IDocumentStore documentStore)
         {
             documentStore.Conventions.MaxNumberOfRequestsPerSession = 50;
         }
-        private void prepareDocumentStore()
+        protected virtual void prepareDocumentStore(string path)
         {
             ConfigureServer(new TestServerOptions
             {
-                DataDirectory = @".\RavenDBTestDir"
-            });
+                DataDirectory = path
+            }) ;
             Store = GetDocumentStore();
             
 
+        }
+        public override void Dispose()
+        {
+            base.Dispose();
+            if (!Store.WasDisposed) Store.Dispose();
         }
     }
 }
