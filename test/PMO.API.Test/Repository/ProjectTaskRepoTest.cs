@@ -165,6 +165,16 @@ namespace PMO.API.Test.Repository
                 var projTaskGetAllActiveProjects = await projTaskRepo.GetAllActiveProject();
                 Assert.NotEmpty(projTaskGetAllActiveProjects);
 
+                var getProjectCount = await projTaskRepo.GetProjectCountByPM(((await userRepo.GetUserByEmployeeId("EP001"))?.Id));
+                Assert.True(getProjectCount>0);
+                
+                var getTaskCount = await projTaskRepo.GetTaskCountByUser((await userRepo.GetUserByEmployeeId("EP002"))?.Id);
+                Assert.True(getTaskCount > 0);
+
+                var endTaskResult = await projTaskRepo.EndTask("P/1", "P/1-2");
+                Assert.True(endTaskResult.Item1);
+                var suspenResult = await projTaskRepo.SuspendProject("P/1");
+                Assert.True(endTaskResult.Item1);
             }
 
         }
