@@ -5,12 +5,12 @@ using System.Text;
 using Xunit;
 namespace PMO.API.Test.Messages
 {
-    public class UserMsgTest
+    public class UserModMsgTest
     {
         [Fact]
         public void GetterSetterTest()
         {
-            var userMsg = new UserMsg
+            var userMsg = new UserModMsg
             {
                 EmployeeId="E001",
                 FirstName="F1",

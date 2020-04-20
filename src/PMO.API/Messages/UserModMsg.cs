@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 namespace PMO.API.Messages
 {
-    public class UserMsg
+    public class UserModMsg
     {
         public string Id { get; set; }
         [Required]
