@@ -49,7 +49,7 @@ namespace PMO.API.DomainService
             if (Validator.TryValidateObject(project, validationContext, validationResults))
             {
                 var projectDO = mapper.Map<Project>(project);
-                return await projectTaskRepo.AddProject(projectDO);
+                return await projectTaskRepo.EditProject(projectDO);
             }
             return new Tuple<bool, string>(false, "validation failures");
         }

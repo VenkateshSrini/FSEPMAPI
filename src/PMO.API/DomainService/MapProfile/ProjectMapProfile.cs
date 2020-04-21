@@ -18,7 +18,9 @@ namespace PMO.API.DomainService.MapProfile
                   options.MapFrom(src => src.End))
                 .ForMember(dest => dest.PMUsrId, options => options.MapFrom(src => src.PMId))
                 .ForMember(dest => dest.ProjectTitle, options => options.MapFrom(src => src.Title))
-                .ForMember(dest => dest.StartDate, options => options.MapFrom(src => src.Start)).ReverseMap();
+                .ForMember(dest => dest.StartDate, options => options.MapFrom(src => src.Start))
+                .ForMember(dest=>dest.Priority, options=>options.MapFrom(src=>src.Priority))
+                .ReverseMap();
 
             CreateMap<Project, ProjectMod>()
                 .ForMember(dest => dest.EndDate, options =>
@@ -27,6 +29,7 @@ namespace PMO.API.DomainService.MapProfile
                 .ForMember(dest => dest.ProjectTitle, options => options.MapFrom(src => src.Title))
                 .ForMember(dest => dest.StartDate, options => options.MapFrom(src => src.Start))
                 .ForMember(dest => dest.ProjId, options => options.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Priority, options => options.MapFrom(src => src.Priority))
                 .ReverseMap();
 
             CreateMap<ProjectUserVO, ProjectListing>()
@@ -35,13 +38,15 @@ namespace PMO.API.DomainService.MapProfile
                  .ForMember(dest => dest.EndDate, options =>
                   options.MapFrom(src => src.Projects.End))
                 .ForMember(dest => dest.PMUsrId, options => options.MapFrom(src => src.Projects.PMId))
-                .ForMember(dest => dest.ProjectTitle, 
+                .ForMember(dest => dest.ProjectTitle,
                 options => options.MapFrom(src => src.Projects.Title))
                 .ForMember(dest => dest.StartDate, options => options.MapFrom(src => src.Projects.Start))
                 .ForMember(dest => dest.ProjId, options => options.MapFrom(src => src.Projects.Id))
                 .ForMember(dest => dest.PMUsrName, options => options.MapFrom(src => src.UserName))
                 .ForMember(dest => dest.TotalTaskCount,
-                options => options.MapFrom(src => src.Projects.MaxTaskCount));
+                options => options.MapFrom(src => src.Projects.MaxTaskCount))
+                .ForMember(dest => dest.Priority, options =>
+                options.MapFrom(src => src.Projects.Priority));
 
 
 

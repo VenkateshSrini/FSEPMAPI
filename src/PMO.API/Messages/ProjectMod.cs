@@ -18,5 +18,6 @@ namespace PMO.API.Messages
         public DateTime EndDate { get; set; }
         [Required]
         public string PMUsrId { get; set; }
+        public int Priority { get; set; } = 0;
     }
 }

@@ -20,6 +20,7 @@ namespace PMO.API.Messages
         public string PMUsrName { get; set; }
         public int TotalTaskCount { get; set; }
         public int CompletedTaskCount { get; set; }
+        public int Priority { get; set; }
 
     }
 }
