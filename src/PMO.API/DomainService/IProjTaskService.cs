@@ -1,0 +1,17 @@
+﻿using PMO.API.Messages;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace PMO.API.DomainService
+{
+   public interface IProjTaskService
+    {
+        Task<List<ProjectListing>> GetAllActiveProject();
+        Task<List<ProjectListing>> GetProjectByName(string projectName);
+        Task<Tuple<bool, string>> AddProject(ProjectAdd project);
+        Task<Tuple<bool, string>> EditProject(ProjectMod project);
+        Task<bool> SuspendProject(string projectId);
+    }
+}
