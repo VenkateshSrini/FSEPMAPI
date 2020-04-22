@@ -193,5 +193,230 @@ namespace PMO.API.Test.DomainService
             var result = await projectTaskService.SuspendProject("P/1");
             Assert.True(result);
         }
+        [Fact]
+        public async Task GetAllActiveTaskTest()
+        {
+            var taskUservo1 = new TaskUserVO
+            {
+                ProjectId = "P/1",
+                Tasks = new ProjTask
+                {
+                    ParentTaskId = "",
+                    EndDate = DateTime.Today.AddDays(2),
+                    Priority = 1,
+                    Start = DateTime.Today,
+                    Name = "ParentTask",
+                    TaskOwnerId = "Usr/2",
+                    Id = "P/1-1",
+                    Status = 0
+                },
+                UserName = "John"
+            };
+            var taskUservo2 = new TaskUserVO
+            {
+                ProjectId = "P/1",
+                Tasks = new ProjTask
+                {
+                    ParentTaskId = "P/1-1",
+                    EndDate = DateTime.Today.AddDays(2),
+                    Priority = 1,
+                    Start = DateTime.Today,
+                    Name = "Task1",
+                    TaskOwnerId = "Usr/3",
+                    Id = "P/1-2",
+                    Status = 0
+                },
+                UserName = "Rob"
+            };
+            var takUserVos = new List<TaskUserVO> { taskUservo1, taskUservo2 };
+            var taskListing1 = new TaskListing
+            {
+                ParentTaskId = "",
+                ParentDescription = "No Parent Task",
+                EndDate = DateTime.Today.AddDays(2),
+                Priority = 1,
+                ProjectId = "P/1",
+                StartDate = DateTime.Today,
+                TaskDescription = "ParentTask",
+                TaskOwnerId = "Usr/2",
+                TaskId = "P/1-1",
+                Status = 0,
+                TaskOwnerName = "John"
+            };
+            var taskListing2 = new TaskListing
+            {
+                ParentTaskId = "P/1-1",
+                ParentDescription = "ParentTask",
+                EndDate = DateTime.Today.AddDays(2),
+                Priority = 1,
+                ProjectId = "P/1",
+                StartDate = DateTime.Today,
+                TaskDescription = "Task1",
+                TaskOwnerId = "Usr/3",
+                TaskId = "P/1-2",
+                Status = 0,
+                TaskOwnerName = "Rob"
+            };
+            var tasklistings = new List<TaskListing> { taskListing1, taskListing2 };
+            var mockProjTaskRepo = new Mock<IProjectTaskRepo>();
+            mockProjTaskRepo.Setup(repo => repo.GetAllActiveTask(It.IsAny<string>()))
+                            .Returns(Task.FromResult(takUserVos));
+            var mockLogger = createProjServiceLogger();
+            var mockMapper = new Mock<IMapper>();
+            var projectTaskService = new ProjTaskService(mockProjTaskRepo.Object, mockLogger, mockMapper.Object);
+            var result = await projectTaskService.GetAllActiveTask("P/1");
+            Assert.NotNull(result);
+
+        }
+        [Fact]
+        public async Task AddTaskTest()
+        {
+            var projTasks = new ProjTask
+            {
+                ParentTaskId = "",
+                EndDate = DateTime.Today.AddDays(2),
+                Priority = 1,
+                Start = DateTime.Today,
+                Name = "ParentTask",
+                TaskOwnerId = "Usr/2",
+                Status = 0
+            };
+            var taskAdd = new TaskAdd
+            {
+                ParentTaskId = "",
+                EndDate = DateTime.Today.AddDays(2),
+                Priority = 1,
+                StartDate = DateTime.Today,
+                TaskDescription = "ParentTask",
+                TaskOwnerId = "Usr/2",
+               ProjectId = "P/1"
+            };
+            var mockProjTaskRepo = new Mock<IProjectTaskRepo>();
+            mockProjTaskRepo.Setup(repo => repo.AddTask(It.IsAny<string>(), It.IsAny<ProjTask>()))
+                            .Returns(Task.FromResult(new Tuple<bool, string>(true, "P/1-1")));
+            
+            var mockLogger = createProjServiceLogger();
+            var mockMapper = new Mock<IMapper>();
+            mockMapper.Setup(map => map.Map<ProjTask>(It.IsAny<TaskAdd>())).Returns(projTasks);
+            var projectTaskService = new ProjTaskService(mockProjTaskRepo.Object, mockLogger, mockMapper.Object);
+            var result = await projectTaskService.AddTask(taskAdd);
+            Assert.True(result.Item1);
+            Assert.Equal("P/1-1", result.Item2);
+        }
+        [Fact]
+        public async Task EditTaskTest()
+        {
+
+            var projTasks = new ProjTask
+            {
+                ParentTaskId = "",
+                EndDate = DateTime.Today.AddDays(2),
+                Priority = 1,
+                Start = DateTime.Today,
+                Name = "ParentTask",
+                TaskOwnerId = "Usr/2",
+                Status = 0
+            };
+            var taskMod = new TaskMod
+            {
+                ParentTaskId = "",
+                EndDate = DateTime.Today.AddDays(2),
+                Priority = 1,
+                StartDate = DateTime.Today,
+                TaskDescription = "ParentTask",
+                TaskOwnerId = "Usr/2",
+                ProjectId = "P/1",
+                TaskId = "P/1-1"
+            };
+            var mockProjTaskRepo = new Mock<IProjectTaskRepo>();
+            mockProjTaskRepo.Setup(repo => repo.EditTask(It.IsAny<string>(), It.IsAny<ProjTask>()))
+                            .Returns(Task.FromResult(new Tuple<bool, string>(true, "P/1-1")));
+            var mockLogger = createProjServiceLogger();
+            var mockMapper = new Mock<IMapper>();
+            mockMapper.Setup(map => map.Map<ProjTask>(It.IsAny<TaskMod>())).Returns(projTasks);
+            var projectTaskService = new ProjTaskService(mockProjTaskRepo.Object, mockLogger, mockMapper.Object);
+            var result = await projectTaskService.EditTask(taskMod);
+            Assert.True(result.Item1);
+            Assert.Equal("P/1-1", result.Item2);
+        }
+        [Fact]
+        public async Task EndTaskTest()
+        {
+            var taskUservo1 = new TaskUserVO
+            {
+                ProjectId = "P/1",
+                Tasks = new ProjTask
+                {
+                    ParentTaskId = "",
+                    EndDate = DateTime.Today.AddDays(2),
+                    Priority = 1,
+                    Start = DateTime.Today,
+                    Name = "ParentTask",
+                    TaskOwnerId = "Usr/2",
+                    Id = "P/1-1",
+                    Status = 0
+                },
+                UserName = "John"
+            };
+            var taskUservo2 = new TaskUserVO
+            {
+                ProjectId = "P/1",
+                Tasks = new ProjTask
+                {
+                    ParentTaskId = "P/1-1",
+                    EndDate = DateTime.Today.AddDays(2),
+                    Priority = 1,
+                    Start = DateTime.Today,
+                    Name = "Task1",
+                    TaskOwnerId = "Usr/3",
+                    Id = "P/1-2",
+                    Status = 0
+                },
+                UserName = "Rob"
+            };
+            var takUserVos = new List<TaskUserVO> { taskUservo1, taskUservo2 };
+            var taskListing1 = new TaskListing
+            {
+                ParentTaskId = "",
+                ParentDescription = "No Parent Task",
+                EndDate = DateTime.Today.AddDays(2),
+                Priority = 1,
+                ProjectId = "P/1",
+                StartDate = DateTime.Today,
+                TaskDescription = "ParentTask",
+                TaskOwnerId = "Usr/2",
+                TaskId = "P/1-1",
+                Status = 0,
+                TaskOwnerName = "John"
+            };
+            var taskListing2 = new TaskListing
+            {
+                ParentTaskId = "P/1-1",
+                ParentDescription = "ParentTask",
+                EndDate = DateTime.Today.AddDays(2),
+                Priority = 1,
+                ProjectId = "P/1",
+                StartDate = DateTime.Today,
+                TaskDescription = "Task1",
+                TaskOwnerId = "Usr/3",
+                TaskId = "P/1-2",
+                Status = 0,
+                TaskOwnerName = "Rob"
+            };
+            var tasklistings = new List<TaskListing> { taskListing1, taskListing2 };
+            var mockProjTaskRepo = new Mock<IProjectTaskRepo>();
+            mockProjTaskRepo.Setup(repo => repo.GetAllActiveTask(It.IsAny<string>()))
+                           .Returns(Task.FromResult(takUserVos));
+            mockProjTaskRepo.Setup(repo => repo.EndTask(It.IsAny<string>(), It.IsAny<string>()))
+                            .Returns(Task.FromResult(new Tuple<bool, string>(true, "P/1-1")));
+
+            var mockLogger = createProjServiceLogger();
+            var mockMapper = new Mock<IMapper>();
+            var projectTaskService = new ProjTaskService(mockProjTaskRepo.Object, mockLogger, mockMapper.Object);
+            var result = await projectTaskService.EndTask("P/1","P/1-2");
+            Assert.True(result.Item1);
+
+            await Assert.ThrowsAnyAsync<ApplicationException>(async () => await projectTaskService.EndTask("P/1", "P/1-1"));
+        }
     }
 }

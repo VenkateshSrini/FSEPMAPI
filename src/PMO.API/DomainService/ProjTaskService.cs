@@ -79,7 +79,8 @@ namespace PMO.API.DomainService
             var taskUservo = await projectTaskRepo.GetAllActiveTask(projectId);
             if (taskUservo.Any())
             {
-                var parentTaskIds = taskUservo?.Select<TaskUserVO, string>(vo => vo?.Tasks?.ParentTaskId)?.Distinct();
+                var parentTaskIds = taskUservo?.Select<TaskUserVO, string>(vo => vo?.Tasks?.ParentTaskId)?.Distinct()?
+                                               .Where(Parid => (!string.IsNullOrWhiteSpace(Parid))).ToList();
                 List<ProjTask> parentTasklst = null;
                 if (parentTaskIds.Any())
                     parentTasklst = taskUservo?.Select<TaskUserVO, ProjTask>(vo => vo?.Tasks)
@@ -103,7 +104,7 @@ namespace PMO.API.DomainService
                                    (parentTasklst.FirstOrDefault(tsk =>
                                    tsk.Id == item.Tasks?.ParentTaskId)?.Start).Value : item.Tasks.Start,
                         Status = item.Tasks.Status,
-                        TakOwnerId = item.Tasks.TaskOwnerId,
+                        TaskOwnerId = item.Tasks.TaskOwnerId,
                         TaskDescription = item.Tasks.Name,
                         TaskId = item.Tasks.Id,
                         TaskOwnerName = item.UserName
@@ -150,6 +151,11 @@ namespace PMO.API.DomainService
 
         public async Task<Tuple<bool, string>> EndTask(string projectId, string taskId)
         {
+            var projTasks = await projectTaskRepo.GetAllActiveTask(projectId);
+            var parentTaskIds = projTasks?.Select<TaskUserVO, string>(vo => vo?.Tasks?.ParentTaskId)?
+                                               .Where(Parid => (taskId.CompareTo(Parid)==0)).ToList();
+            if (parentTaskIds.Any())
+                throw new ApplicationException("cannot close this task as there are some open child task");
             return await projectTaskRepo.EndTask(projectId, taskId);
         }
     }

@@ -16,7 +16,7 @@ namespace PMO.API.Messages
         public int Status { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public string TakOwnerId { get; set; }
+        public string TaskOwnerId { get; set; }
         public string TaskOwnerName { get; set; }
     }
 }
