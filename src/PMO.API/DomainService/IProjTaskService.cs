@@ -1,5 +1,4 @@
-﻿using PMO.API.DomainModel;
-using PMO.API.Messages;
+﻿using PMO.API.Messages;
 using System;
 using System.Collections.Generic;
 using System.Linq;

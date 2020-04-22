@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PMO.API.DomainModel
+namespace PMO.API.Messages
 {
     public class TaskMod
     {
