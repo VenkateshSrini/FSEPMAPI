@@ -148,7 +148,7 @@ namespace PMO.API.Repository
             var result = new List<TaskUserVO>();
             foreach (var task in tasklst)
             {
-                var user = await asyncDocumentSession.LoadAsync<PMOUser>(project.PMId);
+                var user = await asyncDocumentSession.LoadAsync<PMOUser>(task.TaskOwnerId);
                 result.Add(new TaskUserVO
                 {
                     ProjectId = projectId,

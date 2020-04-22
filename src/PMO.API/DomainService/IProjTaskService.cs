@@ -1,4 +1,5 @@
-﻿using PMO.API.Messages;
+﻿using PMO.API.DomainModel;
+using PMO.API.Messages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,5 +14,9 @@ namespace PMO.API.DomainService
         Task<Tuple<bool, string>> AddProject(ProjectAdd project);
         Task<Tuple<bool, string>> EditProject(ProjectMod project);
         Task<bool> SuspendProject(string projectId);
+        Task<List<TaskListing>> GetAllActiveTask(string projectId);
+        Task<Tuple<bool, string>> AddTask(TaskAdd projTask);
+        Task<Tuple<bool, string>> EditTask(TaskMod projTask);
+        Task<Tuple<bool, string>> EndTask(string projectId, string taskId);
     }
 }

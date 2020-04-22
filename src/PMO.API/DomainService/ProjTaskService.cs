@@ -61,6 +61,8 @@ namespace PMO.API.DomainService
             return results;
         }
 
+        
+
         public async Task<List<ProjectListing>> GetProjectByName(string projectName)
         {
             var projUserVO = await projectTaskRepo.GetProjectByName(projectName);
@@ -71,6 +73,84 @@ namespace PMO.API.DomainService
         public async Task<bool> SuspendProject(string projectId)
         {
             return await projectTaskRepo.SuspendProject(projectId);
+        }
+        public async Task<List<TaskListing>> GetAllActiveTask(string projectId)
+        {
+            var taskUservo = await projectTaskRepo.GetAllActiveTask(projectId);
+            if (taskUservo.Any())
+            {
+                var parentTaskIds = taskUservo?.Select<TaskUserVO, string>(vo => vo?.Tasks?.ParentTaskId)?.Distinct();
+                List<ProjTask> parentTasklst = null;
+                if (parentTaskIds.Any())
+                    parentTasklst = taskUservo?.Select<TaskUserVO, ProjTask>(vo => vo?.Tasks)
+                                               .Where(task => parentTaskIds.Contains(task.Id))
+                                               .ToList();
+
+                var result = new List<TaskListing>();
+                taskUservo.ForEach((item)=>{
+                    TaskListing projectListing = new TaskListing
+                    {
+                        EndDate = ((item.Tasks.EndDate==DateTime.MinValue) && (!string.IsNullOrWhiteSpace(item.Tasks?.ParentTaskId))) ?
+                                   (parentTasklst.FirstOrDefault(tsk =>
+                                   tsk.Id == item.Tasks?.ParentTaskId)?.EndDate).Value: item.Tasks.EndDate,
+                        Priority = (item.Tasks?.Priority).Value,
+                        ParentTaskId= item.Tasks?.ParentTaskId,
+                        ParentDescription=(string.IsNullOrWhiteSpace(item.Tasks?.ParentTaskId))?
+                                            "No Parent Task": parentTasklst.FirstOrDefault(tsk=>
+                                                              tsk.Id== item.Tasks?.ParentTaskId)?.Name,
+                        ProjectId = item.ProjectId,
+                        StartDate= ((item.Tasks.Start == DateTime.MinValue) &&(!string.IsNullOrWhiteSpace(item.Tasks?.ParentTaskId))) ?
+                                   (parentTasklst.FirstOrDefault(tsk =>
+                                   tsk.Id == item.Tasks?.ParentTaskId)?.Start).Value : item.Tasks.Start,
+                        Status = item.Tasks.Status,
+                        TakOwnerId = item.Tasks.TaskOwnerId,
+                        TaskDescription = item.Tasks.Name,
+                        TaskId = item.Tasks.Id,
+                        TaskOwnerName = item.UserName
+                    };
+                    result.Add(projectListing);
+                });
+                return result;
+            }
+            return null;
+            
+
+
+        }
+
+        public async Task<Tuple<bool, string>> AddTask(TaskAdd projTask)
+        {
+            if ((projTask.EndDate > DateTime.MinValue) && (projTask.StartDate > DateTime.MinValue)
+                   && (projTask.StartDate > projTask.EndDate))
+                return new Tuple<bool, string>(false, "start date greater than end date");
+            var validationContext = new System.ComponentModel.DataAnnotations.ValidationContext(projTask);
+            var validationResults = new List<ValidationResult>();
+            if (Validator.TryValidateObject(projTask, validationContext, validationResults))
+            {
+                var taskDO = mapper.Map<ProjTask>(projTask);
+                return await projectTaskRepo.AddTask(projTask.ProjectId, taskDO);
+            }
+            return new Tuple<bool, string>(false, "validation failures");
+        }
+
+        public async Task<Tuple<bool, string>> EditTask(TaskMod projTask)
+        {
+            if ((projTask.EndDate > DateTime.MinValue) && (projTask.StartDate > DateTime.MinValue)
+                   && (projTask.StartDate > projTask.EndDate))
+                return new Tuple<bool, string>(false, "start date greater than end date");
+            var validationContext = new System.ComponentModel.DataAnnotations.ValidationContext(projTask);
+            var validationResults = new List<ValidationResult>();
+            if (Validator.TryValidateObject(projTask, validationContext, validationResults))
+            {
+                var taskDO = mapper.Map<ProjTask>(projTask);
+                return await projectTaskRepo.EditTask(projTask.ProjectId, taskDO);
+            }
+            return new Tuple<bool, string>(false, "validation failures");
+        }
+
+        public async Task<Tuple<bool, string>> EndTask(string projectId, string taskId)
+        {
+            return await projectTaskRepo.EndTask(projectId, taskId);
         }
     }
 }
