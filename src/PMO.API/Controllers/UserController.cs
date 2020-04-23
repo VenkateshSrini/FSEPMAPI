@@ -35,7 +35,7 @@ namespace PMO.API.Controllers
                 FirstName = fName
             };
             var results = await userService.GetUserByCriteria(searchCriteria);
-            if (results.Count > 0)
+            if (results.Count == 0)
                 return NotFound("No User found");
             else
                 return Ok(results);
@@ -52,7 +52,7 @@ namespace PMO.API.Controllers
             var results = await userService.GetUserByEmployeeId(empId);
             if (results == default)
                 return NotFound("User not found");
-            return results;
+            return Ok(results);
         }
         [HttpGet]
         [Route("GetAllEmployee")]
@@ -62,9 +62,9 @@ namespace PMO.API.Controllers
         public async Task<ActionResult<List<PMOUser>>> GetAllEmployee()
         {
             var results = await userService.GetAllUser();
-        if (results == default)
+        if (results.Count==0)
                 return NotFound("User not found");
-            return results;
+            return Ok(results);
         }
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

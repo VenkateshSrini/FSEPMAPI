@@ -25,7 +25,7 @@ namespace PMO.API.Controllers
         [Route("GetAllActiveProject")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<ProjectListing>> GetAllActiveProject()
+        public async Task<ActionResult<List<ProjectListing>>> GetAllActiveProject()
         {
             var results = await projService.GetAllActiveProject();
             if (results.Count == 0)
@@ -37,7 +37,7 @@ namespace PMO.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<ProjectListing>> GetProjectByName(string prjId)
+        public async Task<ActionResult<List<ProjectListing>>> GetProjectByName(string prjId)
         {
             if (string.IsNullOrWhiteSpace(prjId))
                 return BadRequest("project id is empty");
@@ -110,7 +110,7 @@ namespace PMO.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<TaskListing>> GetAllActiveTask(string projId)
+        public async Task<ActionResult<List<TaskListing>>> GetAllActiveTask(string projId)
         {
             if (string.IsNullOrWhiteSpace(projId))
                 return BadRequest("project id is empty");
