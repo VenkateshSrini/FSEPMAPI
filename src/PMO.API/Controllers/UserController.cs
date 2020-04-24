@@ -26,8 +26,8 @@ namespace PMO.API.Controllers
         /// Search user based on Parameter. At least one parameter should be non empty
         /// </summary>
         /// <param name="empId">Employee Id</param>
-        /// <param name="lName">First name</param>
-        /// <param name="fName">Last Name</param>
+        /// <param name="lName">Last name</param>
+        /// <param name="fName">First Name</param>
         /// <returns></returns>
         [HttpGet]
         [Route("SearchUser")]
