@@ -129,5 +129,57 @@ namespace PMO.API.Test.Controller
             Assert.NotNull(actionResult);
             Assert.Equal(204, actionResult.StatusCode);
         }
+        [Fact]
+        public async Task AddUserBadRequest()
+        {
+            var mockUserService = new Mock<IUserService>();
+            var userLogger = createUserLogger();
+            var usrController = new UserController(mockUserService.Object, userLogger);
+            var actionResult = (await usrController.Post(null)).Result as BadRequestObjectResult;
+            Assert.NotNull(actionResult);
+            Assert.Equal(400, actionResult.StatusCode);
+        }
+        [Fact]
+        public async Task AddUserBadRequestValidationError()
+        {
+            var usrAddMsg = new UserAddMsg
+            {
+                EmployeeId = "",
+                FirstName = "F1",
+                LastName = "L2"
+            };
+            var mockUserService = new Mock<IUserService>();
+            var userLogger = createUserLogger();
+            var usrController = new UserController(mockUserService.Object, userLogger);
+            var actionResult = (await usrController.Post(usrAddMsg)).Result as BadRequestObjectResult;
+            Assert.NotNull(actionResult);
+            Assert.Equal(400, actionResult.StatusCode);
+        }
+        [Fact]
+        public async Task EditUserBadRequest()
+        {
+            var mockUserService = new Mock<IUserService>();
+            var userLogger = createUserLogger();
+            var usrController = new UserController(mockUserService.Object, userLogger);
+            var actionResult = (await usrController.Put(null)).Result as BadRequestObjectResult;
+            Assert.NotNull(actionResult);
+            Assert.Equal(400, actionResult.StatusCode);
+        }
+        [Fact]
+        public async Task EditUserBadRequestValidationError()
+        {
+            var usrModMsg = new UserModMsg
+            {
+                EmployeeId = "EP001",
+                FirstName = "F1",
+                LastName = "L2"
+            };
+            var mockUserService = new Mock<IUserService>();
+            var userLogger = createUserLogger();
+            var usrController = new UserController(mockUserService.Object, userLogger);
+            var actionResult = (await usrController.Put(usrModMsg)).Result as BadRequestObjectResult;
+            Assert.NotNull(actionResult);
+            Assert.Equal(400, actionResult.StatusCode);
+        }
     }
 }

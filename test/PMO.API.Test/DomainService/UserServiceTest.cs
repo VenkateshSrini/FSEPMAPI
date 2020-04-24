@@ -56,7 +56,8 @@ namespace PMO.API.Test.DomainService
             {
                 EmployeeId = "EP001",
                 FirstName = "F1",
-                LastName = "L2"
+                LastName = "L2",
+                Id="Usr/1"
 
             };
             var pmoUser = new PMOUser

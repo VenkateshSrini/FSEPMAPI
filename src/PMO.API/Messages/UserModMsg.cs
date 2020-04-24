@@ -7,6 +7,7 @@ namespace PMO.API.Messages
 {
     public class UserModMsg
     {
+        [Required]
         public string Id { get; set; }
         [Required]
         public string EmployeeId { get; set; }

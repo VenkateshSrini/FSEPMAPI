@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -98,8 +99,11 @@ namespace PMO.API.Controllers
                 ModelState.AddModelError("ParameterEmpty", "Input parameter are all empty");
                 return BadRequest(ModelState);
             }
-            if (!ModelState.IsValid)
+            var validationContext = new System.ComponentModel.DataAnnotations.ValidationContext(userAdd);
+            var validationResults = new List<ValidationResult>();
+            if (!Validator.TryValidateObject(userAdd, validationContext, validationResults))
             {
+                ModelState.AddModelError("Validation Request", "Validation error");
                 return BadRequest(ModelState);
             }
             var usr = await userService.GetUserByEmployeeId(userAdd.EmployeeId);
@@ -132,7 +136,9 @@ namespace PMO.API.Controllers
                 ModelState.AddModelError("ParameterEmpty", "Input parameter are all empty");
                 return BadRequest(ModelState);
             }
-            if (!ModelState.IsValid)
+            var validationContext = new System.ComponentModel.DataAnnotations.ValidationContext(userMod);
+            var validationResults = new List<ValidationResult>();
+            if (!Validator.TryValidateObject(userMod, validationContext, validationResults))
             {
                 return BadRequest(ModelState);
             }
