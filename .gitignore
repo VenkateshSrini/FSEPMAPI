@@ -18,3 +18,4 @@
 /test/PMO.API.Test/bin/Debug/netcoreapp3.1
 /test/PMO.API.Test/obj/Debug/netcoreapp3.1
 /test/PMO.API.Test/obj
+/_codecoverage

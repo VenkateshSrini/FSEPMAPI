@@ -14,6 +14,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{00745332-3620-4618-BE69-A7DE6E43F821}"
 	ProjectSection(SolutionItems) = preProject
 		azure-pipelines.yml = azure-pipelines.yml
+		runCoverage.cmd = runCoverage.cmd
 	EndProjectSection
 EndProject
 Global
