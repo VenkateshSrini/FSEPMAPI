@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace PMO.API.ExtensionHelper
 {
+	[ExcludeFromCodeCoverage]
 	public class DBSettings
 	{
 		public RavenDB RavenDb { get; set; }
 	}
+	[ExcludeFromCodeCoverage]
 	public class RavenDB
 	{
 		public string[] Urls { get; set; }

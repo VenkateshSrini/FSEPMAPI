@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using PMO.API.DomainModel;
 using PMO.API.Messages;
+using System.Diagnostics.CodeAnalysis;
 
 namespace PMO.API.DomainService.MapProfile
 {
+    [ExcludeFromCodeCoverage]
     public class TaskMapProfile:Profile
     {
         public TaskMapProfile()
