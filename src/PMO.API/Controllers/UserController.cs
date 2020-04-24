@@ -22,6 +22,13 @@ namespace PMO.API.Controllers
             this.userService = userService;
             this.userLogger = logger;
         }
+        /// <summary>
+        /// Search user based on Parameter. At least one parameter should be non empty
+        /// </summary>
+        /// <param name="empId">Employee Id</param>
+        /// <param name="lName">First name</param>
+        /// <param name="fName">Last Name</param>
+        /// <returns></returns>
         [HttpGet]
         [Route("SearchUser")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -40,6 +47,11 @@ namespace PMO.API.Controllers
             else
                 return Ok(results);
         }
+        /// <summary>
+        /// Get a user based on employee id
+        /// </summary>
+        /// <param name="empId">Employee id</param>
+        /// <returns></returns>
         [HttpGet]
         [Route("GetEmployeeById")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -54,6 +66,10 @@ namespace PMO.API.Controllers
                 return NotFound("User not found");
             return Ok(results);
         }
+        /// <summary>
+        /// Gets all the employee
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Route("GetAllEmployee")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -66,6 +82,11 @@ namespace PMO.API.Controllers
                 return NotFound("User not found");
             return Ok(results);
         }
+        /// <summary>
+        /// Add User
+        /// </summary>
+        /// <param name="userAdd">Details of the user to be added</param>
+        /// <returns></returns>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -95,6 +116,11 @@ namespace PMO.API.Controllers
             }
             return StatusCode(500, "Unable to create user");
         }
+        /// <summary>
+        /// Edit user
+        /// </summary>
+        /// <param name="userMod">Details of user that need to be edited</param>
+        /// <returns></returns>
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status202Accepted)]
@@ -119,6 +145,11 @@ namespace PMO.API.Controllers
                 return StatusCode(500, "Unable to edit user");
 
         }
+        /// <summary>
+        /// Deletes a user
+        /// </summary>
+        /// <param name="empId">Employee id of the user that needs to be deleted</param>
+        /// <returns></returns>
         [HttpDelete]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]

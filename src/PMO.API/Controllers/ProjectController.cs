@@ -21,6 +21,10 @@ namespace PMO.API.Controllers
             this.projService = projService;
             projLogger = logger;
         }
+        /// <summary>
+        /// Get All active projects
+        /// </summary>
+        /// <returns>List of active projects</returns>
         [HttpGet]
         [Route("GetAllActiveProject")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -32,20 +36,30 @@ namespace PMO.API.Controllers
                 return NotFound("No active projects found");
             return Ok(results);
         }
+        /// <summary>
+        /// Get a set of project which has the word that is passed as parameter
+        /// </summary>
+        /// <param name="prjNm"> words contained in projetc</param>
+        /// <returns></returns>
         [HttpGet]
         [Route("GetProjectByName")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<List<ProjectListing>>> GetProjectByName(string prjId)
+        public async Task<ActionResult<List<ProjectListing>>> GetProjectByName(string prjNm)
         {
-            if (string.IsNullOrWhiteSpace(prjId))
+            if (string.IsNullOrWhiteSpace(prjNm))
                 return BadRequest("project id is empty");
-            var result = await projService.GetProjectByName(prjId);
+            var result = await projService.GetProjectByName(prjNm);
             if (result.Count == 0)
                 return NotFound("No project with given name found");
             return Ok(result);
         }
+        /// <summary>
+        /// Add project 
+        /// </summary>
+        /// <param name="projectAdd">Details of project to be added</param>
+        /// <returns></returns>
         [HttpPost]
         [Route("AddProject")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -68,6 +82,11 @@ namespace PMO.API.Controllers
             else
                 return StatusCode(500, "Unable to create project");
         }
+        /// <summary>
+        /// Edit project
+        /// </summary>
+        /// <param name="projectMod">Edition details</param>
+        /// <returns></returns>
         [HttpPut]
         [Route("EditProject")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -90,6 +109,12 @@ namespace PMO.API.Controllers
             else
                 return StatusCode(500, "Unable to edit project");
         }
+        /// <summary>
+        /// Supend an active project
+        /// </summary>
+        /// <param name="projId">Id of the project that needs to be suspended</param>
+        /// <returns></returns>
+
         [HttpPut]
         [Route("SuspendProject")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -105,6 +130,12 @@ namespace PMO.API.Controllers
             else
                 return StatusCode(500, "Unable to suspend project");
         }
+        /// <summary>
+        /// Get all active task for a project
+        /// </summary>
+        /// <param name="projId">Project Id</param>
+        /// <returns></returns>
+
         [HttpGet]
         [Route("GetAllActiveTask")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -120,6 +151,11 @@ namespace PMO.API.Controllers
             else
                 return NotFound("No Active task found");
         }
+        /// <summary>
+        /// Add Task
+        /// </summary>
+        /// <param name="taskAdd">Detail of tak to be added</param>
+        /// <returns></returns>
         [HttpPost]
         [Route("AddTask")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -143,6 +179,11 @@ namespace PMO.API.Controllers
                 return StatusCode(500, "Unable to create project");
 
         }
+        /// <summary>
+        /// Edit task
+        /// </summary>
+        /// <param name="taskMod">Detail of tak to be edited</param>
+        /// <returns></returns>
         [HttpPut]
         [Route("EditTask")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -165,6 +206,12 @@ namespace PMO.API.Controllers
             else
                 return StatusCode(500, "Unable to edit task");
         }
+        /// <summary>
+        /// Ends an active task
+        /// </summary>
+        /// <param name="projId">Project id</param>
+        /// <param name="tskId">Task id</param>
+        /// <returns></returns>
         [HttpPut]
         [Route("EndTask")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
