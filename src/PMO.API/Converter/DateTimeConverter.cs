@@ -13,8 +13,11 @@ namespace PMO.API.Converter
     {
         public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            //Debug.Assert(typeToConvert == typeof(DateTime));
-            return DateTime.Parse(reader.GetString());
+            if (reader.HasValueSequence)
+
+                return DateTime.Parse(reader.GetString());
+            else
+                return DateTime.MinValue;
         }
 
         public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
