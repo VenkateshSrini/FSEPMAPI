@@ -146,7 +146,7 @@ namespace PMO.API.Controllers
             if (string.IsNullOrWhiteSpace(projId))
                 return BadRequest("project id is empty");
             var result = await projService.GetAllActiveTask(projId);
-            if (result.Count > 0)
+            if (result?.Count > 0)
                 return Ok(result);
             else
                 return NotFound("No Active task found");
